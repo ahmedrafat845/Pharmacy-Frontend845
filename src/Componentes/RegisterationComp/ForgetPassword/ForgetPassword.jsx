@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 import { BaseUrl } from '../../BaseUrl/base';
 import ErrorList from '../ErrorList/ErrorList';
 
-export default function Login() {
+export default function ForgetPassword() {
   const [passwordVisible, setPasswordVisible] = useState(false); 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -28,38 +28,28 @@ export default function Login() {
 
   let validationSchema=Yup.object({
     email:Yup.string().required().email(),
-    password:Yup.string()
-    .matches(/^[A-Z][a-z0-9@$%&#]{5,}$/, `Password must start with an uppercase
-     letter and be at least 6 characters long,
-      including lowercase letters, digits, or @, $, %, &, #.`)
-    .required('Password is required')
   })
 
   let Formik = useFormik({
-    initialValues:{
-     
+    initialValues:{ 
       email:'',
-      password:''
-      
     },
-    validationSchema
-    ,
+    validationSchema,
 
     onSubmit: (values) => {
       setLoading(true);
       
-      axios.post(`${BaseUrl}/users/signIn`, values)
+      axios.post(`${BaseUrl}/users/forget-password`, values)
         .then((response) => {
-          if (response.status === 201) {
-            notify('Registration successful! 💊', 'success');
-            localStorage.setItem('token',response.data.token)
-            navigate('/');
+          if (response.status === 200) {
+            notify('Success 💊', 'success');
+            navigate('/ResetPassword');
           }
           console.log(response);
         }).catch((error) => {
           if (error.response || error.response.status === 400) {
             setLoading(false);
-            const errorMessage = error.response.data.msg || "An error occurred";
+            const errorMessage = error.response.data.message || "An error occurred";
             notify(errorMessage, 'error');
           }
         });
@@ -79,7 +69,7 @@ export default function Login() {
      <div className={`${styles.container}`}>
 
       <form className={styles.form} onSubmit={Formik.handleSubmit}>
-        <h1 className='text-success'>Login</h1>
+        <h1 className='text-success'>Forget Password</h1>
         <div className="row mb-3">
           <div className="col-12 col-md-12">
             <input type="email" className="form-control"
@@ -92,44 +82,16 @@ export default function Login() {
   
         </div>
       
-        
-
-        <div className="row mb-3">
-            <div className="col-12 col-md-12">
-              <input
-                type={passwordVisible ? 'text' : 'password'} 
-                className="form-control"
-                placeholder="Password"
-                name="password"
-                onBlur={Formik.handleBlur}
-                onChange={Formik.handleChange} 
-                value={Formik.values.password}
-                
-              />
-                <ErrorList Formik={Formik} type={"password"} />
-              <span onClick={togglePasswordVisibility} style={{ cursor: 'pointer', position: 'absolute', right: '10px', top: '10px' }}>
-                <FontAwesomeIcon icon={passwordVisible ? faEye : faEyeSlash} />
-              </span>
-            </div>
-           
-          </div>
-
-
-       
-
         <button disabled={!(Formik.isValid && Formik.dirty && !loading)} type='submit' className={styles['gradient-button']}>
                    
-                   {!loading? ("Login"):
+                   {!loading? ("Sent Otp Code"):
                    <i className='fa-spinner fa-spin fas mt-2'></i>
                    
                    }
               
                 </button>
                 <div className='text-center mt-2'>
-                <span >Do not have an account ? <Link to={'/SignUp'} className='linkk text-success'>Sign Up</Link></span>
-                  </div>
-                  <div className='text-center mt-2'>
-                <span >Forget Password ? <Link to={'/ForgetPassword'} className='linkk text-success'>Forget Password</Link></span>
+                <span >Back to login ? <Link to={'/Login'} className='linkk text-success'>Login</Link></span>
                   </div>
 
        

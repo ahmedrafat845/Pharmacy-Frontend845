@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 import { BaseUrl } from '../../BaseUrl/base';
 import ErrorList from '../ErrorList/ErrorList';
 
-export default function Login() {
+export default function ResetPassword() {
   const [passwordVisible, setPasswordVisible] = useState(false); 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -28,38 +28,38 @@ export default function Login() {
 
   let validationSchema=Yup.object({
     email:Yup.string().required().email(),
-    password:Yup.string()
+    otp:Yup.string().required(),
+    newPassword:Yup.string()
     .matches(/^[A-Z][a-z0-9@$%&#]{5,}$/, `Password must start with an uppercase
      letter and be at least 6 characters long,
       including lowercase letters, digits, or @, $, %, &, #.`)
-    .required('Password is required')
+    .required('Password is required'),
+
   })
 
   let Formik = useFormik({
-    initialValues:{
-     
+    initialValues:{ 
       email:'',
-      password:''
-      
+      otp:'',
+      newPassword:''
     },
-    validationSchema
-    ,
+    validationSchema,
 
     onSubmit: (values) => {
       setLoading(true);
       
-      axios.post(`${BaseUrl}/users/signIn`, values)
+      axios.post(`${BaseUrl}/users/reset-password`, values)
         .then((response) => {
-          if (response.status === 201) {
-            notify('Registration successful! 💊', 'success');
-            localStorage.setItem('token',response.data.token)
-            navigate('/');
+          if (response.status === 200) {
+            setLoading(false)
+            notify('Password Reset successful! 💊', 'success');
+            navigate('/Login');
           }
           console.log(response);
         }).catch((error) => {
           if (error.response || error.response.status === 400) {
             setLoading(false);
-            const errorMessage = error.response.data.msg || "An error occurred";
+            const errorMessage = error.response.data.message || "An error occurred";
             notify(errorMessage, 'error');
           }
         });
@@ -79,7 +79,7 @@ export default function Login() {
      <div className={`${styles.container}`}>
 
       <form className={styles.form} onSubmit={Formik.handleSubmit}>
-        <h1 className='text-success'>Login</h1>
+        <h1 className='text-success'>Reset Password</h1>
         <div className="row mb-3">
           <div className="col-12 col-md-12">
             <input type="email" className="form-control"
@@ -91,45 +91,50 @@ export default function Login() {
           </div>
   
         </div>
-      
-        
+
 
         <div className="row mb-3">
+          <div className="col-12">
+            <input type="text" className="form-control" 
+             onBlur={Formik.handleBlur}
+             onChange={Formik.handleChange} 
+             value={Formik.values.otp}
+            placeholder="otp" name="otp" />
+              <ErrorList Formik={Formik} type={"otp"} />
+          </div>
+        </div>
+
+
+          <div className="row mb-3">
             <div className="col-12 col-md-12">
               <input
                 type={passwordVisible ? 'text' : 'password'} 
                 className="form-control"
-                placeholder="Password"
-                name="password"
+                placeholder="newPassword"
+                name="newPassword"
                 onBlur={Formik.handleBlur}
                 onChange={Formik.handleChange} 
-                value={Formik.values.password}
+                value={Formik.values.newPassword}
                 
               />
-                <ErrorList Formik={Formik} type={"password"} />
+                <ErrorList Formik={Formik} type={"newPassword"} />
               <span onClick={togglePasswordVisibility} style={{ cursor: 'pointer', position: 'absolute', right: '10px', top: '10px' }}>
                 <FontAwesomeIcon icon={passwordVisible ? faEye : faEyeSlash} />
               </span>
             </div>
            
           </div>
-
-
-       
-
+      
         <button disabled={!(Formik.isValid && Formik.dirty && !loading)} type='submit' className={styles['gradient-button']}>
                    
-                   {!loading? ("Login"):
+                   {!loading? ("Reset Password"):
                    <i className='fa-spinner fa-spin fas mt-2'></i>
                    
                    }
               
                 </button>
                 <div className='text-center mt-2'>
-                <span >Do not have an account ? <Link to={'/SignUp'} className='linkk text-success'>Sign Up</Link></span>
-                  </div>
-                  <div className='text-center mt-2'>
-                <span >Forget Password ? <Link to={'/ForgetPassword'} className='linkk text-success'>Forget Password</Link></span>
+                <span >Back to forget Password ? <Link to={'/ForgetPassword'} className='linkk text-success'>Forge tPassword</Link></span>
                   </div>
 
        

@@ -24,6 +24,8 @@ export default function NavBar() {
                
             
                     <Nav.Link href="#"><Link className='nav-link' to=''>Home</Link></Nav.Link>
+                    <Nav.Link href="#"><Link className='nav-link' to='Products'>Products</Link></Nav.Link>
+                    
             
             </Nav>
             <Form className="d-flex justify-content-end  w-25 pe-4">

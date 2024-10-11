@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 import App from './Componentes/App/App';
 import MediaContextProvider from './Context/MediaStore';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
