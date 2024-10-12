@@ -9,6 +9,10 @@ import { ToastContainer } from 'react-toastify';
 import ForgetPassword from '../RegisterationComp/ForgetPassword/ForgetPassword';
 import ResetPassword from '../RegisterationComp/ResetPassword/ResetPassword';
 import Products from '../LayOutComp/Products/Products';
+import MedicalTests from '../LayOutComp/MedicalTests/MedicalTests';
+import FetchCartProvider from '../../Context/Cart';
+import CartPage from './../LayOutComp/CartPage/CartPage';
+import MedicalTourism from '../LayOutComp/medicaltourism/medicaltourism';
 
 
 
@@ -18,6 +22,9 @@ export default function App() {
     {path:'/',element:<MasterLayOut/>, errorElement:<NotFound/>,children:([
       {index:true,element:  <Home/>  },
       {path:'Products',element: <Products/> },
+      {path:'MedicalTests',element: <MedicalTests/> },
+      { path: 'Cart', element: <CartPage /> },
+      { path: 'MedicalTourism', element: <MedicalTourism /> },
 
 
 
@@ -35,7 +42,10 @@ export default function App() {
   return (
     <>
       <ToastContainer  theme='colored'/>
-       <RouterProvider router={routes}/>
+      <FetchCartProvider>
+         <RouterProvider router={routes}/>
+      </FetchCartProvider>
+       
     </>
   )
 }
