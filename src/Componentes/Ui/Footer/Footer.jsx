@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
 import Styles from './Footer.module.scss';
@@ -33,8 +34,8 @@ export default function Footer() {
       </section>
 
       <section className=''>
-        <MDBContainer className='text-center text-md-start mt-5 '>
-          <MDBRow className='mt-3 '>
+        <MDBContainer className='text-center text-md-start mt-5'>
+          <MDBRow className='mt-3'>
             <MDBCol md="3" lg="4" xl="3" className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4 text-light'>
                 <MDBIcon icon="gem" className="me-3" />
@@ -46,7 +47,7 @@ export default function Footer() {
               </p>
             </MDBCol>
 
-            <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4 '>
+            <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4 text-light'>Category</h6>
               <p>
                 <a href='#!' className='text-reset text-light' style={{ textDecoration: 'none' }}>
@@ -73,51 +74,51 @@ export default function Footer() {
                   Bones
                 </a>
               </p>
-              <p >
+              <p>
                 <a href='#!' className='text-reset text-light' style={{ textDecoration: 'none' }}>
                   Mental Health
                 </a>
               </p>
             </MDBCol>
 
-            <MDBCol md="3" lg="2" xl="2" className='mx-auto mb-4'>
+<MDBCol md="3" lg="2" xl="2" className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4 text-light'>Useful links</h6>
-              <p className='text-light'>
+              <p>
                 <a href='#!' className='text-reset text-light' style={{ textDecoration: 'none' }}>
                   Pricing
                 </a>
               </p>
-              <p className='text-light'>
+              <p>
                 <a href='#!' className='text-reset text-light' style={{ textDecoration: 'none' }}>
                   Settings
                 </a>
               </p>
-              <p className='text-light'>
+              <p>
                 <a href='#!' className='text-reset text-light' style={{ textDecoration: 'none' }}>
                   Orders
                 </a>
               </p>
-              <p className='text-light'>
+              <p>
                 <a href='#!' className='text-reset text-light' style={{ textDecoration: 'none' }}>
                   Help
                 </a>
               </p>
             </MDBCol>
 
-            <MDBCol md="4" lg="3" xl="3" className='mx-auto mb-md-0 mb-4 '>
+            <MDBCol md="4" lg="3" xl="3" className='mx-auto mb-md-0 mb-4'>
               <h6 className='text-uppercase fw-bold mb-4 text-light'>Contact</h6>
-              <p className='text-light'>
+              <p>
                 <MDBIcon icon="home" className="me-2" />
                 Egypt, Cairo
               </p>
-              <p className='text-light'>
+              <p>
                 <MDBIcon icon="envelope" className="me-3" />
                 rosheta950@gmail.com
               </p>
-              <p className='text-light'>
+              <p>
                 <MDBIcon icon="phone" className="me-3" /> +20 109 423 1021
               </p>
-              <p className='text-light'>
+              <p>
                 <MDBIcon icon="print" className="me-3" /> + 01 234 567 89
               </p>
             </MDBCol>
