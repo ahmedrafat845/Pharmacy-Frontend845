@@ -14,12 +14,20 @@
     border: green solid 1px;
 
 }
+.center
+{
+    text-align: center;
+}
 .card
 {
-    height: 450px;
+    height: 430px;
     cursor: pointer;
 
 }
+.wishlistedHeart {
+    background-color: #dcdada;; /* Light gray color */
+}
+
 .card{
     margin-top: 10px;
     padding-top: 20px;

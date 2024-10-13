@@ -13,6 +13,8 @@ import MedicalTests from '../LayOutComp/MedicalTests/MedicalTests';
 import FetchCartProvider from '../../Context/Cart';
 import CartPage from './../LayOutComp/CartPage/CartPage';
 import MedicalTourism from '../LayOutComp/medicaltourism/medicaltourism';
+import ProtectRouter from '../RegisterationComp/ProtectRouter/ProtectRouter';
+import WishList from '../LayOutComp/WishList/WishList';
 
 
 
@@ -20,11 +22,12 @@ export default function App() {
  
   let   routes=createBrowserRouter([
     {path:'/',element:<MasterLayOut/>, errorElement:<NotFound/>,children:([
-      {index:true,element:  <Home/>  },
-      {path:'Products',element: <Products/> },
-      {path:'MedicalTests',element: <MedicalTests/> },
-      { path: 'Cart', element: <CartPage /> },
-      { path: 'MedicalTourism', element: <MedicalTourism /> },
+      {index:true,element:<ProtectRouter> <Home/> </ProtectRouter>   },
+      {path:'Products',element:<ProtectRouter><Products/></ProtectRouter>  },
+      {path:'MedicalTests',element:<ProtectRouter> <MedicalTests/></ProtectRouter> },
+      { path: 'Cart', element:<ProtectRouter><CartPage /></ProtectRouter>  },
+      { path: 'WishList', element:<ProtectRouter><WishList /></ProtectRouter>  },
+      { path: 'MedicalTourism', element:<ProtectRouter><MedicalTourism /></ProtectRouter>  },
 
 
 
