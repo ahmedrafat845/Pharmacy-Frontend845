@@ -20,7 +20,7 @@ const CartPage = () => {
 
     const [totals, setTotals] = useState({
         subtotal: 0,
-        shippingFees: 0,
+        shippingFees: 40,
         totalPrice: 0,
     });
 
@@ -28,7 +28,7 @@ const CartPage = () => {
 
     useEffect(() => {
         const subtotal = cartItems.reduce((acc, item) => {
-            const price = parseFloat(item.productId.price);
+            const price = item.productId.offer? parseFloat(item.productId.price)*0.8 : parseFloat(item.productId.price);
             const count = item.quantity;
 
             if (!isNaN(price) && !isNaN(count)) {
@@ -50,24 +50,84 @@ const CartPage = () => {
         }
     };
 
-    const handleCashPayment = () => {
-        // Logic for handling cash payment
-        toast.success('Payment processed using Cash on Delivery');
-    };
+    const handleCashPayment = async () => {
+        try {
+            const response = await axios.post('https://pharmacy-backend845.vercel.app/carts/payment/cash', {
+                userId: userData.userId,
+                items: cart.items.map(item => ({
+                    productId: item.productId._id,
+                    quantity: item.quantity,
+                })),
+            });
 
-    const handleVisaPayment = () => {
-        // Logic for handling Visa payment
-        toast.success('Payment processed using Visa');
-    };
-
-    const handleQuantityChange = (productId, newQuantity, maxQuantity) => {
-        if (newQuantity > 0 && newQuantity <= maxQuantity) {
-            UpdateProductCart(productId, newQuantity);
-        } else {
-            toast.error('Invalid quantity');
+            toast.success(response.data.msg, {
+                autoClose: 2000,
+                theme: 'dark',
+                position: 'top-center',
+            });
+            clearCart(); 
+        } catch (error) {
+            console.error('Payment Error:', error);
+            toast.error('Payment failed. Please try again.', {
+                autoClose: 2000,
+                theme: 'dark',
+                position: 'top-center',
+            });
         }
     };
-    
+
+    const handleVisaPayment = async () => {
+        try {
+            const response = await axios.post('https://pharmacy-backend845.vercel.app/payment/create-payment', {
+                userId: userData.userId,
+                items: cart.items.map(item => ({
+                    productId: item.productId._id,
+                    quantity: item.quantity,
+                })),
+                paymentMethod: 'Credit Card',
+            });
+
+            if (!response.data.paymentToken) {
+                throw new Error('Payment token is missing from the response.');
+            }
+
+            const orderId = response.data.orderId; 
+            const paymentUrl = `https://accept.paymobsolutions.com/api/acceptance/iframes/${871391}?payment_token=${response.data.paymentToken}&redirect_url=https://yourwebsite.com/payment/callback`;
+            
+            window.open(paymentUrl, '_blank');
+
+            clearCart(); 
+            //await completePayment(orderId);
+
+        } catch (error) {
+            console.error('Payment Error:', error);
+            toast.error('Payment failed. Please try again.', {
+                autoClose: 2000,
+                theme: 'dark',
+                position: 'top-center',
+            });
+        }
+    };
+    const handleQuantityChange = (productId, newCount, stockQuantity) => {
+        const item = cart.items.find(item => item.productId._id === productId);
+        if (!item) return;
+
+        if (newCount > stockQuantity) {
+            toast.error(`Cannot exceed stock quantity of ${stockQuantity} units`, {
+                autoClose: 1000,
+                theme: 'dark',
+                position: 'bottom-center',
+            });
+            return;
+        }
+
+        if (newCount < 1) {
+            deleteProductCart(productId);
+            return;
+        }
+
+        UpdateProductCart(productId, newCount);
+    };
     const handleCheckout = () => {
         // if (cartItems.length === 0) {
         //     toast.error('Your cart is empty. Please add items to your cart before proceeding.');
@@ -76,7 +136,7 @@ const CartPage = () => {
 
 
 
-        clearCart();
+        // clearCart();
     };
 
     return (
@@ -89,7 +149,7 @@ const CartPage = () => {
                     <div className="col-12 col-lg-8">
                         {cart.items.length === 0 ? (
                             <div className={styles.emptyCartContainer}>
-                            <img src={emptyCartImage} alt="Your cart is empty" className={styles.emptyCartImage} />
+                            <img src={emptyCartImage} alt="Your cart is empty" className={`img-fluid ${styles.emptyCartImage}`} />
                             {/* <p className={styles.emptyCartMessage}>Your cart is empty.</p> */}
                             <button onClick={() => navigate('/products')} className={styles.browseProductsButton}>
                                 Browse Products
@@ -108,7 +168,7 @@ const CartPage = () => {
                                             <div className={`d-flex flex-column ${styles.cartItemDetails}`}>
                                                 <h4 className={styles.cartItemTitle}>{item.productId.name}</h4>
                                                 <p className={styles.cartItemDescription}>{item.productId.description}</p>
-                                                <p className={styles.cartItemPrice}>Price: {parseFloat(item.productId.price).toFixed(2)} EG</p>
+                                                <p className={styles.cartItemPrice}>Price: {item.productId.offer? parseFloat(item.productId.price*0.8).toFixed(2) :parseFloat(item.productId.price).toFixed(2)}EG</p>
                                                 <p className={styles.cartItemStock}>Total in Stock: {item.productId.quantity} units</p>
                                                 <div className={`d-flex align-items-center ${styles.cartItemQuantity}`}>
                                                     <button 
@@ -139,7 +199,43 @@ const CartPage = () => {
                         )}
                     </div>
 
-                    <div className="col-12 col-lg-4">
+                    <div className="col-12 col-lg-4 ">
+                        {/* Order Summary Section */}
+                        <div className={styles.cartSummary}>
+                            <h3 className={styles.h3}>Order Summary</h3>
+                            <div className={styles.summaryDetails}>
+                                <div className={styles.summaryItem}>
+                                    <span>Subtotal </span>
+                                    <span>{totals.subtotal.toFixed(2)} EGY</span>
+                                </div>
+                                <div className={styles.summaryItem}>
+                                    <span>Shipping Fees </span>
+                                    <span>{totals.shippingFees} EGY</span>
+                                </div>
+                                <div className={[styles.summaryItem]}>
+                                    <span>Total Products </span>
+                                    <span>{cart.items.reduce((acc, item) => acc + item.quantity, 0)} items</span>
+                                </div>
+                                <hr className={styles.divider} />
+                                <div className={styles.totalSection}>
+                                    <h4 className={styles.h4}>Total</h4>
+                                    <h4 className={styles.h4}>{totals.totalPrice.toFixed(2)} EGY</h4>
+                                </div>
+                            </div>
+                            {/* <button 
+                                className={`btn btn-success ${styles.checkoutButton}`}
+                                onClick={handleCheckout}
+                                disabled={cart.items.length === 0}
+                            >
+                                CHECKOUT
+                            </button> */}
+                            <button 
+                                onClick={() => clearCart()} 
+                                className={`btn btn-danger ${styles.clearCartButton}`}
+                            >
+                                Clear Cart
+                            </button>
+                        </div>
                         {/* Payment Section */}
                         <div className={styles.cartSummary}>
                             <h4 className={styles.h4}>Payment Method</h4>
@@ -178,50 +274,12 @@ const CartPage = () => {
                                 </div>
                             </div>
                             <button onClick={handlePayment} className={`btn btn-success ${styles.checkoutButton}`}>
-                                SELECT
-                            </button>
-                        </div>
-
-                        {/* Order Summary Section */}
-                        <div className={styles.cartSummary}>
-                            <h3 className={styles.h3}>Order Summary</h3>
-                            <div className={styles.summaryDetails}>
-                                <div className={styles.summaryItem}>
-                                    <span>Subtotal </span>
-                                    <span>{totals.subtotal.toFixed(2)} EGY</span>
-                                </div>
-                                <div className={styles.summaryItem}>
-                                    <span>Shipping Fees </span>
-                                    <span>{totals.shippingFees} EGY</span>
-                                </div>
-                                <div className={[styles.summaryItem]}>
-                                    <span>Total Products </span>
-                                    <span>{cart.items.reduce((acc, item) => acc + item.quantity, 0)} items</span>
-                                </div>
-                                <hr className={styles.divider} />
-                                <div className={styles.totalSection}>
-                                    <h4 className={styles.h4}>Total</h4>
-                                    <h4 className={styles.h4}>{totals.totalPrice.toFixed(2)} EGY</h4>
-                                </div>
-                            </div>
-                            <button 
-                                className={`btn btn-success ${styles.checkoutButton}`}
-                                onClick={handleCheckout}
-                                disabled={cart.items.length === 0}
-                            >
-                                CHECKOUT
-                            </button>
-                            <button 
-                                onClick={() =>clearCart()} 
-                                className={`btn btn-danger ${styles.clearCartButton}`}
-                            >
-                                Clear Cart
+                                Click to order
                             </button>
                         </div>
                     </div>
                 </div>
             </Container>
-            <Footer/>
         </div>
     );
 };

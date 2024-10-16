@@ -8,20 +8,18 @@ import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { FetchCartContext } from './../../../Context/Cart';
 import { FetchWishlistContext } from '../../../Context/WishList';
+import noProduct from '../../../images/nproduct.png';
 export default function Product({ categoryProducts, categoryName, loading }) {
 
   const { AddProductToCart, deleteProductCart, cart ,getProductCart } = useContext(FetchCartContext);
   const {addProductToWishlist,wishlist,getProductWishlist,
-    deleteProductFromWishlist}=useContext(FetchWishlistContext)
-
+  deleteProductFromWishlist}=useContext(FetchWishlistContext)
   const [cartIds, setCartIds] = useState([]);
   const [wishListIds, seWishListIds] = useState([]);
   const [loading2, setLoading2] = useState({}); 
 
-  
-
   useEffect(() => {
-    if (cart && cart.items) {
+    if (cart && cart.items ) {
       const newCartIds = cart.items.map(item => item.productId._id);
       setCartIds(newCartIds);
     }
@@ -57,16 +55,19 @@ export default function Product({ categoryProducts, categoryName, loading }) {
   return (
     <Container className={`${Styles.allProduct} mt-4`}>
       <div className={Styles.cont}>
-        <h2 className={Styles.title}>Product Of Category {categoryName} 💊</h2>
+        <h2 className={Styles.title}>{categoryName} Products💊</h2>
       </div>
       <div className="row mt-3">
+        { categoryProducts.length==0 &&<div className='text-center'>
+            <img src={noProduct} alt="No Product" className={Styles.noProduct} />
+          </div>}
         {loading ? (
           <div className="text-center">
             <i className="fa-solid fa-capsules text-danger fa-spin fa-3x"></i>
           </div>
         ) : categoryProducts ? (
           <>
-            {categoryProducts.map((item, index) => { // Using slice from props here
+            {categoryProducts.map((item, index) => { 
                const isCarted = cartIds.includes(item.productId);
                const iswishList = wishListIds.includes(item.productId);
                const modalId = `${categoryName.replace(/\s+/g, '')}_${item.productId}`;
@@ -199,7 +200,7 @@ export default function Product({ categoryProducts, categoryName, loading }) {
             })}
           </>
         ) : (
-          <div className="text-center"></div>
+          <></>
         )}
       </div>
     </Container>

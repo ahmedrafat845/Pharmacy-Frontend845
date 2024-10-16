@@ -49,9 +49,9 @@ export default function FetchWishlistProvider(props) {
             const response = await axios.patch(`${BaseUrl}/wishlist/addToWishlist`, { productId }, {
                 headers: { 'token': token }
             });
-            console.log('Response from adding to wishlist:', response.data); // Log the response
+            console.log('Response from adding to wishlist:', response.data);
             notify('Product Added To Wishlist', 'success');
-            getProductWishlist(); // Refresh the wishlist
+            getProductWishlist();
         } catch (error) {
             console.error("Error adding product to wishlist:", error);
             notify('Error adding product to wishlist', 'error');
@@ -61,11 +61,11 @@ export default function FetchWishlistProvider(props) {
     const deleteProductFromWishlist = async (productId) => {
         try {
             const response = await axios.delete(`${BaseUrl}/wishlist/removeFromWishlist`, {
-                data: { productId }, // Include the productId in the request body
+                data: { productId },
                 headers: { 'token': token }
             });
             notify('Product Deleted From Wishlist', 'success');
-            getProductWishlist(); // Refresh the wishlist
+            getProductWishlist(); 
         } catch (error) {
             console.error("Error deleting product from wishlist:", error);
             notify('Error deleting product from wishlist', 'error');

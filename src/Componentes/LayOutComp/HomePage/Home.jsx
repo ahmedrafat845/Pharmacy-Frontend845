@@ -21,8 +21,6 @@ export default function Home() {
       <Ask/>
       <BestSeller/>
       <Test/>
-      <Footer/>
-
       
     </>
   )

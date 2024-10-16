@@ -26,7 +26,7 @@ export default function FetchCartProvider(props) {
                 headers: { 'token': token }
             });
             notify('Product Added To Cart', 'success');
-            getProductCart(); // Refresh cart after adding
+            getProductCart(); 
         } catch (error) {
             const message = error.response?.data?.message || 'Error adding product to cart';
             console.error(message, error);
@@ -41,7 +41,7 @@ export default function FetchCartProvider(props) {
             });
             setCart(data.cart);
             calculateNumOfCart(data.cart.items); 
-            setNumOfCart(data.cart.items.length);// Update numOfCart after fetching
+            setNumOfCart(data.cart.items.length);
         } catch (error) {
             console.error("Error fetching cart:", error);
         }
@@ -65,7 +65,7 @@ export default function FetchCartProvider(props) {
             });
             setCart((prevCart) => {
                 const updatedItems = prevCart.items.filter(item => item.productId._id !== productId);
-                calculateNumOfCart(updatedItems); // Recalculate numOfCart after deletion
+                calculateNumOfCart(updatedItems); 
                 return { ...prevCart, items: updatedItems };
             });
             notify('Product Deleted From Cart', 'success');
@@ -80,7 +80,7 @@ export default function FetchCartProvider(props) {
                 headers: { 'token': token }
             });
             notify(`Product ${quantity} updated`, 'success');
-            getProductCart(); // Refresh cart after updating
+            getProductCart();
         } catch (error) {
             const message = error.response?.data?.msg || 'Error updating product quantity';
             notify(message, 'error');
@@ -94,7 +94,7 @@ export default function FetchCartProvider(props) {
                 headers: { 'token': token }
             });
             setCart({ items: [] });
-            setNumOfCart(0); // Reset the number of items in the cart
+            setNumOfCart(0);
             notify('Products cleared from cart', 'success');
         } catch (error) {
             notify('Error clearing cart', 'error');

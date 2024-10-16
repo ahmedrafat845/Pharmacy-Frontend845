@@ -32,11 +32,11 @@ const MedicalTourism = () => {
           <p>
             Medical tourism in Egypt has become increasingly popular due to its high-quality healthcare services at competitive prices. The country offers a variety of treatments, including cosmetic surgery, dental care, and specialized medical procedures, supported by well-trained professionals and modern facilities. Major cities like Cairo and Sharm El Sheikh attract patients who can combine medical care with tourism, enjoying Egypt's rich culture and beautiful landscapes. This growing sector positions Egypt as a preferred destination for those seeking affordable and quality medical treatments abroad.
           </p>
-          <Link to="/MedicalTourism">
+          <Link to="/MedicalTourism" className='text-decoration-none'>
             <Button
               variant="success"
               className={styles.button}
-              onClick={() => window.scrollTo(0, 0)} // Add this line
+              onClick={() => window.scrollTo(0, 0)} 
             >
               Explore <FontAwesomeIcon icon={faMagnifyingGlass} size="x" />
             </Button>

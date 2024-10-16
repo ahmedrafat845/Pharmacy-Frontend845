@@ -7,8 +7,11 @@ import Styles from './Offers.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FetchCartContext } from './../../../../Context/Cart';
-
+import { FetchWishlistContext } from '../../../../Context/WishList';
 function Offers() {
+    const {addProductToWishlist,wishlist,getProductWishlist,
+        deleteProductFromWishlist}=useContext(FetchWishlistContext);
+    const [wishListIds, seWishListIds] = useState([]);
     const { AddProductToCart, deleteProductCart, cart, getProductCart } = useContext(FetchCartContext);
     const [offerCounts, setOfferCounts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,12 +20,29 @@ function Offers() {
     const [loadingMap, setLoadingMap] = useState({});
 
     useEffect(() => {
+        if (wishlist && wishlist.result) {
+            const newWishListIds = wishlist.result.map(item => item._id);
+            seWishListIds(newWishListIds);
+          }
         if (cart && cart.items) {
-            const newCartIds = cart.items.map(item => item.productId._id);
+            const newCartIds = cart.items.map(item => item.productId ? item.productId._id : null).filter(id => id !== null);
             setCartIds(newCartIds);
         }
-    }, [cart]);
-
+    }, [cart,wishlist]);
+    const handlWishlist = async (productId, method) => {
+        try{
+        if (method === 'post') {
+          await addProductToWishlist(productId);
+          seWishListIds(prev => [...prev, productId]);
+        } else {
+          await deleteProductFromWishlist(productId);
+          seWishListIds(prev => prev.filter(id => id !== productId));
+        }
+        getProductWishlist();}
+        catch (error) {
+        console.error("Error handling cart action:", error);
+    } 
+      };
     const handleAddToCart = async (productId, method) => {
         setLoadingMap(prev => ({ ...prev, [productId]: true }));
 
@@ -45,7 +65,7 @@ function Offers() {
     const fetchOfferCounts = async () => {
         try {
             const response = await axios.get('https://pharmacy-backend845.vercel.app/products/getAllProducts');
-            const allProducts = response.data.allProducts;
+            const allProducts = response.data.allProducts || [];
             const offerItems = allProducts.filter(item => item.offer === true);
             setOfferCounts(offerItems);
         } catch (err) {
@@ -59,6 +79,7 @@ function Offers() {
         fetchOfferCounts();
     }, []);
 
+    
     if (loading) {
         return <i className="fa-solid fa-capsules text-danger fa-spin fa-3x d-block mx-auto text-center mt-4"></i>;
     }
@@ -74,9 +95,10 @@ function Offers() {
             </div>
             <div className="row">
                 {offerCounts.slice(0, 12).map(item => {
-                    const isCarted = cartIds.includes(item._id); // Check if item._id is in cartIds
+                    if (!item) return null; 
+                    const isCarted = cartIds.includes(item._id); 
                     const isLoading = loadingMap[item._id];
-    
+                    const iswishList = wishListIds.includes(item._id);
                     return (
                         <div className="col-xl-2 col-md-4 col-6 mb-3" key={item._id}>
                             <Card className={Styles.card}>
@@ -95,12 +117,14 @@ function Offers() {
                                         <span className={Styles.percent}>20%</span>
                                     </div>
                                     <div className={Styles.contain}>
-                                        <div className={Styles.heart} onClick={() => {/* Toggle favorite functionality here */}}>
-                                            <FontAwesomeIcon icon={faHeart} className={Styles.ii} />
+                                        <div  onClick={() => handlWishlist(item._id, iswishList ? 'delete' : 'post')}
+                                                className={`${[Styles.heart]} `}>
+                                                <i className={`${Styles.ii} ${iswishList? 'fa-solid':'fa-regular'}  fa-heart`}></i> 
+                                                
                                         </div>
                                         <Button
                                             variant={isCarted ? 'danger' : 'success'}
-                                            onClick={() => handleAddToCart(item._id, isCarted ? 'delete' : 'post')} // Use item._id here
+                                            onClick={() => handleAddToCart(item._id, isCarted ? 'delete' : 'post')} 
                                             className={`${Styles.button} ${isCarted ? 'bg-danger' : ''}`}
                                             disabled={isLoading}
                                         >
@@ -122,7 +146,6 @@ function Offers() {
             </div>
         </Container>
     );
-    
 }
 
 export default Offers;

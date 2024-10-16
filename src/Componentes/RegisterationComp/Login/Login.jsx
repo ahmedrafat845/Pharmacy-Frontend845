@@ -1,5 +1,5 @@
 
-import React , {useState} from 'react'
+import React , {useState, useContext} from 'react'
 import styles from '../SignUp/signUp.module.scss'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -10,8 +10,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'
 import { BaseUrl } from '../../BaseUrl/base';
 import ErrorList from '../ErrorList/ErrorList';
-
+import { mediaContext } from '../../../Context/MediaStore';
 export default function Login() {
+
   const [passwordVisible, setPasswordVisible] = useState(false); 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);

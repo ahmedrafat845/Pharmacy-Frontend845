@@ -2,7 +2,6 @@ import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { BaseUrl } from '../Componentes/BaseUrl/base';
 
-// Create the context
 export const FetchProduct = createContext(null);
 
 export default function FetchProducttProvider(props) {
@@ -17,7 +16,6 @@ export default function FetchProducttProvider(props) {
   const [ear, setEar] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Function to fetch data for different categories
   let getAllItems = async (category, callBack) => {
     try {
       setLoading(true);
@@ -30,7 +28,6 @@ export default function FetchProducttProvider(props) {
     }
   };
 
-  // Fetch data on component mount
   useEffect(() => {
     getAllItems('Ear', setEar);
     getAllItems('eyes', setEyes);
@@ -43,7 +40,6 @@ export default function FetchProducttProvider(props) {
     getAllItems('Bones', setBones);
   }, []);
 
-  // Return the provider and pass the required values
   return (
     <FetchProduct.Provider value={{ ear, eyes,
      painkiller, skinCare, haircare, head,

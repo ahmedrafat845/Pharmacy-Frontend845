@@ -8,9 +8,8 @@ export default function WishList() {
 
     useEffect(() => {
         if (wishlist && wishlist.result) {
-            // Transform the wishlist result
             const transformedWish = wishlist.result.map(item => ({
-                productId: item._id, // Change _id to productId
+                productId: item._id, 
                 name: item.name,
                 price: item.price,
                 quantity: item.quantity,
@@ -22,7 +21,7 @@ export default function WishList() {
                 createdAt: item.createdAt,
                 updatedAt: item.updatedAt,
             }));
-            setWish(transformedWish); // Update the wish state with transformed data
+            setWish(transformedWish); 
         }
     }, [wishlist]);
 

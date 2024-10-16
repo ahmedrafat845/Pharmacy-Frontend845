@@ -1,54 +1,67 @@
-import React from 'react'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import MasterLayOut from './../LayOutComp/MaterLayOut/MasterLayOut';
-import NotFound from './../RegisterationComp/NotFound/NotFound';
-import Home from './../LayOutComp/HomePage/Home';
-import Login from './../RegisterationComp/Login/Login';
-import SignUp from '../RegisterationComp/SignUp/SignUp';
-import { ToastContainer } from 'react-toastify';
-import ForgetPassword from '../RegisterationComp/ForgetPassword/ForgetPassword';
-import ResetPassword from '../RegisterationComp/ResetPassword/ResetPassword';
-import Products from '../LayOutComp/Products/Products';
-import MedicalTests from '../LayOutComp/MedicalTests/MedicalTests';
+import React, { useContext } from 'react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import FetchCartProvider from '../../Context/Cart';
-import CartPage from './../LayOutComp/CartPage/CartPage';
+import { mediaContext } from '../../Context/MediaStore';
+import ProductManager from '../LayOutComp/AdminPage/Admin';
+import MedicalTests from '../LayOutComp/MedicalTests/MedicalTests';
 import MedicalTourism from '../LayOutComp/medicaltourism/medicaltourism';
-import ProtectRouter from '../RegisterationComp/ProtectRouter/ProtectRouter';
+import Products from '../LayOutComp/Products/Products';
 import WishList from '../LayOutComp/WishList/WishList';
-
-
+import ForgetPassword from '../RegisterationComp/ForgetPassword/ForgetPassword';
+import ProtectRouter from '../RegisterationComp/ProtectRouter/ProtectRouter';
+import ResetPassword from '../RegisterationComp/ResetPassword/ResetPassword';
+import SignUp from '../RegisterationComp/SignUp/SignUp';
+import CartPage from './../LayOutComp/CartPage/CartPage';
+import Home from './../LayOutComp/HomePage/Home';
+import MasterLayOut from './../LayOutComp/MaterLayOut/MasterLayOut';
+import Login from './../RegisterationComp/Login/Login';
+import Alternative from '../LayOutComp/Alternative/AlternativesPage';
+import Profile from '../LayOutComp/profile/profile'
+import NotFound from './../LayOutComp/NotFound/NotFound';
+import { ToastContainer } from 'react-toastify';
 
 export default function App() {
- 
-  let   routes=createBrowserRouter([
-    {path:'/',element:<MasterLayOut/>, errorElement:<NotFound/>,children:([
-      {index:true,element:<ProtectRouter> <Home/> </ProtectRouter>   },
-      {path:'Products',element:<ProtectRouter><Products/></ProtectRouter>  },
-      {path:'MedicalTests',element:<ProtectRouter> <MedicalTests/></ProtectRouter> },
-      { path: 'Cart', element:<ProtectRouter><CartPage /></ProtectRouter>  },
-      { path: 'WishList', element:<ProtectRouter><WishList /></ProtectRouter>  },
-      { path: 'MedicalTourism', element:<ProtectRouter><MedicalTourism /></ProtectRouter>  },
+  const { Role } = useContext(mediaContext);
+  let routesConfig = [
+    {
+      path: '/',
+      element: <MasterLayOut />,
+      errorElement: <NotFound />,
+      children: [
+        { path: 'Products', element: <ProtectRouter><Products /></ProtectRouter> },
+        { path: 'MedicalTests', element: <ProtectRouter><MedicalTests /></ProtectRouter> },
+        { path: 'Cart', element: <ProtectRouter><CartPage /></ProtectRouter> },
+        { path: 'WishList', element: <ProtectRouter><WishList /></ProtectRouter> },
+        { path: 'MedicalTourism', element: <ProtectRouter><MedicalTourism /></ProtectRouter> },
+        { path: 'Alternative', element: <ProtectRouter><Alternative /></ProtectRouter> },
+        { path: 'Profile', element: <ProtectRouter><Profile /></ProtectRouter> },
+        { path: 'Login', element: <Login /> },
+        { path: 'SignUp', element: <SignUp /> },
+        { path: 'ForgetPassword', element: <ForgetPassword /> },
+        { path: 'ResetPassword', element: <ResetPassword /> },
+      ]
+    }
+  ];
 
 
+  if (Role === 'admin') {
+    routesConfig[0].children.push({
+      index:true,
+      element: <ProtectRouter><ProductManager /></ProtectRouter>
+    });
+  }else{
+    routesConfig[0].children.push( { index: true, element: <ProtectRouter><Home /></ProtectRouter> });
+  }
 
+  const routes = createBrowserRouter(routesConfig);
 
-
-      {path:'Login',element: <Login/> },
-      {path:'SignUp',element: <SignUp/>},
-      {path:'ForgetPassword',element: <ForgetPassword/>},
-      {path:'ResetPassword',element: <ResetPassword/>}
-      
-
-    ])}
-  ])
-  
   return (
     <>
-      <ToastContainer  theme='colored'/>
+    
       <FetchCartProvider>
-         <RouterProvider router={routes}/>
+        <ToastContainer theme='colored' />
+        <RouterProvider router={routes} />
       </FetchCartProvider>
-       
     </>
-  )
+  );
 }

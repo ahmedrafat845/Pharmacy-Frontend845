@@ -41,7 +41,7 @@ export default function MedicalTests() {
         <div className="container pt-4">
           <div className="row ">
             <div className="col-md-12 text-center py-2 ">
-              <h2>Medical Tests Collection</h2>
+              <h2 className="text-center">Medical Tests Collection</h2>
               <div className={` ${style.line} w-50  m-auto`}></div>
             </div>
             <div className="col-md-9 m-auto pt-3">
