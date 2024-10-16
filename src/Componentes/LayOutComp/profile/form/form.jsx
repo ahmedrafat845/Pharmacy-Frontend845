@@ -64,7 +64,7 @@ const Form = () => {
 
         try {
            
-            const response = await fetch('http://localhost:3000/users/updateUserData', {
+            const response = await fetch('https://pharmacy-backend845-ezf4.vercel.app/users/updateUserData', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
