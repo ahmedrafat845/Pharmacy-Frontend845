@@ -100,7 +100,7 @@ function Offers() {
                     const isLoading = loadingMap[item._id];
                     const iswishList = wishListIds.includes(item._id);
                     return (
-                        <div className="col-xl-2 col-md-4 col-6 mb-3" key={item._id}>
+                        <div className="col-xl-2 col-md-4 col-12 mb-3" key={item._id}>
                             <Card className={Styles.card}>
                                 <Card.Title className={[Styles.text, Styles.category]}>{item.category}</Card.Title>
                                 <div className={Styles.offer}>Offer</div>

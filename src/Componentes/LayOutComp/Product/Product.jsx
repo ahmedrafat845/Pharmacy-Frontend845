@@ -72,7 +72,7 @@ export default function Product({ categoryProducts =[], categoryName = '', loadi
                const iswishList = wishListIds.includes(item.productId);
                const modalId = `${categoryName.replace(/\s+/g, '')}_${item.productId}`;
                return (
-                <div className="col-xl-2 col-md-4 col-6 mb-5" key={index}>
+                <div className="col-xl-2 col-md-4 col-12 mb-5" key={index}>
                   <Card className={Styles.card}>
                     <Link data-bs-toggle="modal" data-bs-target={`#${modalId}`}  className='linkk'>
                       <Card.Title className={[Styles.text,Styles.category]}>{categoryName}</Card.Title>
