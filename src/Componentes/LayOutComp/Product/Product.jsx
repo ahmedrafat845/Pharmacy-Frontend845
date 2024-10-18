@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { FetchCartContext } from './../../../Context/Cart';
 import { FetchWishlistContext } from '../../../Context/WishList';
 import noProduct from '../../../images/nproduct.png';
-export default function Product({ categoryProducts, categoryName, loading }) {
+export default function Product({ categoryProducts =[], categoryName = '', loading }) {
 
   const { AddProductToCart, deleteProductCart, cart ,getProductCart } = useContext(FetchCartContext);
   const {addProductToWishlist,wishlist,getProductWishlist,
@@ -67,7 +67,7 @@ export default function Product({ categoryProducts, categoryName, loading }) {
           </div>
         ) : categoryProducts ? (
           <>
-            {categoryProducts.map((item, index) => { 
+            {categoryProducts && categoryProducts.map((item, index) => { 
                const isCarted = cartIds.includes(item.productId);
                const iswishList = wishListIds.includes(item.productId);
                const modalId = `${categoryName.replace(/\s+/g, '')}_${item.productId}`;
@@ -100,13 +100,6 @@ export default function Product({ categoryProducts, categoryName, loading }) {
                       {item.price} EG
                     </Card.Text>}
                       <div className={[Styles.contain]}>
-
-
-
-                       
-
-
-
                        <div>
                        <Button 
                           variant={isCarted ? 'danger' : 'success'}
@@ -118,7 +111,7 @@ export default function Product({ categoryProducts, categoryName, loading }) {
                             <i className="fa-solid fa-cart-shopping fa-spin"></i>
                           ) : (
                             <>
-                              {isCarted ? "Remove" : "Order"}
+                              {isCarted ? "Remove" : "Add to"}
                               <FontAwesomeIcon icon={faCartShopping} className={Styles.icon} />
                             </>
                           )}    

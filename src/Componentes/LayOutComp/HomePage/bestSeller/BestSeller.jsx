@@ -119,9 +119,7 @@ function BestSeller() {
                                         {item.price} EG
                                     </Card.Text>
                                     <div className={[Styles.contain]}>
-                                        <div onClick={() => handleWishlist(item._id, isWishList ? 'delete' : 'post')} className={`${[Styles.heart]} `}>
-                                            <i className={`${Styles.ii} ${isWishList ? 'fa-solid' : 'fa-regular'} fa-heart`}></i>
-                                        </div>
+                                        
                                         <Button
                                             variant={isCarted ? 'danger' : 'success'}
                                             onClick={() => handleAddToCart(item._id, isCarted ? 'delete' : 'post')}
@@ -137,6 +135,9 @@ function BestSeller() {
                                                 </>
                                             )}
                                         </Button>
+                                        <div onClick={() => handleWishlist(item._id, isWishList ? 'delete' : 'post')} className={`${[Styles.heart]} `}>
+                                            <i className={`${Styles.ii} ${isWishList ? 'fa-solid' : 'fa-regular'} fa-heart`}></i>
+                                        </div>
                                     </div>
                                 </Card.Body>
                             </Card>

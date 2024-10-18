@@ -117,11 +117,7 @@ function Offers() {
                                         <span className={Styles.percent}>20%</span>
                                     </div>
                                     <div className={Styles.contain}>
-                                        <div  onClick={() => handlWishlist(item._id, iswishList ? 'delete' : 'post')}
-                                                className={`${[Styles.heart]} `}>
-                                                <i className={`${Styles.ii} ${iswishList? 'fa-solid':'fa-regular'}  fa-heart`}></i> 
-                                                
-                                        </div>
+                                      
                                         <Button
                                             variant={isCarted ? 'danger' : 'success'}
                                             onClick={() => handleAddToCart(item._id, isCarted ? 'delete' : 'post')} 
@@ -137,6 +133,11 @@ function Offers() {
                                                 </>
                                             )}
                                         </Button>
+                                        <div  onClick={() => handlWishlist(item._id, iswishList ? 'delete' : 'post')}
+                                                className={`${[Styles.heart]} `}>
+                                                <i className={`${Styles.ii} ${iswishList? 'fa-solid':'fa-regular'}  fa-heart`}></i> 
+                                                
+                                        </div>
                                     </div>
                                 </Card.Body>
                             </Card>
