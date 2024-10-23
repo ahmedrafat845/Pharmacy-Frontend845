@@ -6,6 +6,8 @@ import { Container, Button, Modal, Spinner } from 'react-bootstrap';
 import noOrder from '../../../images/noOrder.jpg';
 import { toast } from 'react-toastify';
 import { BaseUrl } from '../../BaseUrl/base'
+import { useNavigate } from 'react-router-dom';
+
 const Orders = () => {
     const { userData, Role } = useContext(mediaContext);
     const [orders, setOrders] = useState([]);
@@ -15,6 +17,7 @@ const Orders = () => {
     const [paymentError, setPaymentError] = useState('');
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [statusToUpdate, setStatusToUpdate] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOrders = async () => {
