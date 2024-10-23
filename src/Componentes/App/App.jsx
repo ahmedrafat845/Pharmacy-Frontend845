@@ -19,7 +19,8 @@ import Alternative from '../LayOutComp/Alternative/AlternativesPage';
 import Profile from '../LayOutComp/profile/profile'
 import NotFound from './../LayOutComp/NotFound/NotFound';
 import { ToastContainer } from 'react-toastify';
-
+import ReverseProtectRouter from '../RegisterationComp/ReverseProtectRouter/ReverseProtect';
+import Orders from '../LayOutComp/Orders/Order';
 export default function App() {
   const { Role } = useContext(mediaContext);
   let routesConfig = [
@@ -35,7 +36,9 @@ export default function App() {
         { path: 'MedicalTourism', element: <ProtectRouter><MedicalTourism /></ProtectRouter> },
         { path: 'Alternative', element: <ProtectRouter><Alternative /></ProtectRouter> },
         { path: 'Profile', element: <ProtectRouter><Profile /></ProtectRouter> },
-        { path: 'Login', element: <Login /> },
+        { path: 'Orders', element: <ProtectRouter><Orders /></ProtectRouter> },
+
+        { path:"Login" ,element:<ReverseProtectRouter><Login /></ReverseProtectRouter>} ,
         { path: 'SignUp', element: <SignUp /> },
         { path: 'ForgetPassword', element: <ForgetPassword /> },
         { path: 'ResetPassword', element: <ResetPassword /> },

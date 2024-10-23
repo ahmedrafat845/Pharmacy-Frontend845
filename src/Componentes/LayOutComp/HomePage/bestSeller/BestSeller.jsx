@@ -8,7 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faArrowRight, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FetchCartContext } from './../../../../Context/Cart';
 import { FetchWishlistContext } from '../../../../Context/WishList';
-
+import { BaseUrl } from '../../../BaseUrl/base'
+import { Link } from 'react-router-dom';
 function BestSeller() {
     const { addProductToWishlist, wishlist, getProductWishlist, deleteProductFromWishlist } = useContext(FetchWishlistContext);
     const { AddProductToCart, deleteProductCart, cart, getProductCart } = useContext(FetchCartContext);
@@ -73,7 +74,7 @@ function BestSeller() {
 
     const fetchBestSellerCounts = async () => {
         try {
-            const response = await axios.get('https://pharmacy-backend845.vercel.app/products/getAllProducts');
+            const response = await axios.get(`${BaseUrl}/products/getAllProducts`);
             const allProducts = response  .data.allProducts || [];
             const bestSellerItems = allProducts.filter(item => item.bestSeller === true);
             setBestSellerCounts(bestSellerItems);
@@ -96,7 +97,9 @@ function BestSeller() {
         <Container className="mt-4">
             <div className={Styles.cont}>
                 <h2 className={Styles.title}>{"Our Best Seller "}</h2>
-                <h5 className={Styles.all}>{"See All Products "} <FontAwesomeIcon icon={faArrowRight} size="1x" /></h5>
+                <Link to="/Products"> 
+                    <h5 className={Styles.all} onClick={() => window.scrollTo(0, 0)} >{"See All Products "} <FontAwesomeIcon icon={faArrowRight} size="1x" /></h5>
+                </Link>
             </div>
             <div className="row">
                 {bestSellerCounts.slice(0, 12).map((item) => {
@@ -120,12 +123,14 @@ function BestSeller() {
                                     </Card.Text>
                                     <div className={[Styles.contain]}>
                                         
-                                        <Button
+                                        
+                                        { item.quantity>0?
+                                            <Button
                                             variant={isCarted ? 'danger' : 'success'}
                                             onClick={() => handleAddToCart(item._id, isCarted ? 'delete' : 'post')}
                                             className={`w-80 ${isCarted ? 'btn-danger' : Styles.button}`}
                                             disabled={isLoading}
-                                        >
+                                            >
                                             {isLoading ? (
                                                 <i className="fa-solid fa-cart-shopping fa-spin"></i>
                                             ) : (
@@ -134,7 +139,17 @@ function BestSeller() {
                                                     <FontAwesomeIcon icon={faCartShopping} className={Styles.icon} />
                                                 </>
                                             )}
-                                        </Button>
+                                            </Button>
+                                            :
+                                            <Button 
+                                                variant={'danger'}
+                                                className={`${Styles.button} bg-danger}`}
+                                                disabled
+                                            >
+                                                Sold out <i class="fas fa-frown"></i>
+                                            </Button>
+
+                                                }
                                         <div onClick={() => handleWishlist(item._id, isWishList ? 'delete' : 'post')} className={`${[Styles.heart]} `}>
                                             <i className={`${Styles.ii} ${isWishList ? 'fa-solid' : 'fa-regular'} fa-heart`}></i>
                                         </div>

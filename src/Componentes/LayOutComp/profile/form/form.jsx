@@ -6,7 +6,7 @@ import man from '../../../../images/Admin-Profile-Vector-PNG-File.png';
 import Button from 'react-bootstrap/Button';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
-
+import { BaseUrl } from '../../../BaseUrl/base'
 const Form = () => {
     const notify = (msg, type) => {
         toast[type](msg, {
@@ -64,7 +64,7 @@ const Form = () => {
 
         try {
            
-            const response = await fetch('https://pharmacy-backend845-ezf4.vercel.app/users/updateUserData', {
+            const response = await fetch(`${BaseUrl}/users/updateUserData`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ const Form = () => {
 
             if (!response.ok) {
                 setLoading(false);
-                throw new Error('Failed to update user data');
+                throw new Error('Failed to update user data check your Password');
             }
             setLoading(false);
             const data = await response.json();
@@ -90,8 +90,6 @@ const Form = () => {
             notify(error.message,'error');
         }
     };
-
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;

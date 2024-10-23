@@ -8,14 +8,13 @@ import Footer from '../../Ui/Footer/Footer';
 import axios from 'axios';
 import emptyCartImage from '../../../images/Cartempty.png';
 import { useNavigate } from 'react-router-dom';
-
+import { BaseUrl } from '../../BaseUrl/base'
 
 const CartPage = () => {
-    const navigate = useNavigate(); // Initialize the navigate function
+    const navigate = useNavigate(); 
     const { cart, UpdateProductCart, deleteProductCart, clearCart } = useContext(FetchCartContext);
     const { userData } = useContext(mediaContext);
 
-    // Ensure cart and items are always defined
     const cartItems = cart?.items || [];
 
     const [totals, setTotals] = useState({
@@ -49,56 +48,65 @@ const CartPage = () => {
             handleVisaPayment();
         }
     };
-
     const handleCashPayment = async () => {
         try {
-            const response = await axios.post('https://pharmacy-backend845.vercel.app/carts/payment/cash', {
+            const response = await axios.post(`${BaseUrl}/carts/payment/cash`, {
                 userId: userData.userId,
                 items: cart.items.map(item => ({
                     productId: item.productId._id,
                     quantity: item.quantity,
                 })),
             });
-
-            toast.success(response.data.msg, {
+    
+            if (!response.data.success) {
+                throw new Error('Cash payment failed.');
+            }
+    
+            // Notify the user of success
+            toast.success('Cash payment successful. ' , {
                 autoClose: 2000,
                 theme: 'dark',
                 position: 'top-center',
             });
-            clearCart(); 
+    
+            clearCart(); // Clear the cart after successful payment
+    
         } catch (error) {
-            console.error('Payment Error:', error);
-            toast.error('Payment failed. Please try again.', {
+            console.error('Cash Payment Error:', error);
+            toast.error('Cash payment failed. Please try again.', {
                 autoClose: 2000,
                 theme: 'dark',
                 position: 'top-center',
             });
         }
     };
-
+    
     const handleVisaPayment = async () => {
         try {
-            const response = await axios.post('https://pharmacy-backend845.vercel.app/payment/create-payment', {
+            const payload = {
                 userId: userData.userId,
                 items: cart.items.map(item => ({
                     productId: item.productId._id,
                     quantity: item.quantity,
                 })),
                 paymentMethod: 'Credit Card',
-            });
-
+            };
+            console.log('Request Payload:', payload); // Log the request payload
+    
+            const response = await axios.post(`${BaseUrl}/payment/create-payment`, payload);
+    
             if (!response.data.paymentToken) {
                 throw new Error('Payment token is missing from the response.');
             }
-
+    
             const orderId = response.data.orderId; 
-            const paymentUrl = `https://accept.paymobsolutions.com/api/acceptance/iframes/${871391}?payment_token=${response.data.paymentToken}&redirect_url=https://yourwebsite.com/payment/callback`;
+            const paymentUrl = `https://accept.paymobsolutions.com/api/acceptance/iframes/${871391}?payment_token=${response.data.paymentToken}`;
             
             window.open(paymentUrl, '_blank');
-
+    
             clearCart(); 
             //await completePayment(orderId);
-
+    
         } catch (error) {
             console.error('Payment Error:', error);
             toast.error('Payment failed. Please try again.', {
@@ -108,6 +116,7 @@ const CartPage = () => {
             });
         }
     };
+    
     const handleQuantityChange = (productId, newCount, stockQuantity) => {
         const item = cart.items.find(item => item.productId._id === productId);
         if (!item) return;

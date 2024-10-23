@@ -27,7 +27,7 @@ export default function Product({ categoryProducts =[], categoryName = '', loadi
       const newWishListIds = wishlist.result.map(item => item._id);
       seWishListIds(newWishListIds);
     }
-  }, [cart,wishlist]);
+  }, [cart,wishlist,categoryProducts]);
   
   const handleAddToCart = async (productId, method) => {
     setLoading2(prev => ({ ...prev, [productId]: true }));
@@ -101,21 +101,33 @@ export default function Product({ categoryProducts =[], categoryName = '', loadi
                     </Card.Text>}
                       <div className={[Styles.contain]}>
                        <div>
+                       
+                        { item.quantity>0?
                        <Button 
-                          variant={isCarted ? 'danger' : 'success'}
-                          onClick={() => handleAddToCart(item.productId, isCarted ? 'delete' : 'post')}
-                          className={`${Styles.button} ${isCarted ? 'bg-danger' : ''}`}
-                          disabled={loading2[item.productId]}
-                        >
-                          {loading2[item.productId] ? (
-                            <i className="fa-solid fa-cart-shopping fa-spin"></i>
-                          ) : (
-                            <>
-                              {isCarted ? "Remove" : "Add to"}
-                              <FontAwesomeIcon icon={faCartShopping} className={Styles.icon} />
-                            </>
-                          )}    
-                        </Button>
+                       variant={isCarted ? 'danger' : 'success'}
+                       onClick={() => handleAddToCart(item.productId, isCarted ? 'delete' : 'post')}
+                       className={`${Styles.button} ${isCarted ? 'bg-danger' : ''}`}
+                       disabled={loading2[item.productId]}
+                     >
+                       {loading2[item.productId] ? (
+                         <i className="fa-solid fa-cart-shopping fa-spin"></i>
+                       ) : (
+                         <>
+                           {isCarted ? "Remove" : "Add to"}
+                           <FontAwesomeIcon icon={faCartShopping} className={Styles.icon} />
+                         </>
+                       )}    
+                     </Button>:
+                        <Button 
+                        variant={'danger'}
+                        className={`${Styles.button} bg-danger}`}
+                        disabled
+                      >
+                         Sold out <i class="fas fa-frown"></i>
+                            
+                      </Button>
+
+                        }
                        </div>
                        <div onClick={() => handlWishlist(item.productId, iswishList ? 'delete' : 'post')}
                          className={`${[Styles.heart]} `}>
@@ -140,7 +152,7 @@ export default function Product({ categoryProducts =[], categoryName = '', loadi
                           <div className="col-md-6 ps-md-3">
                             <h4 className='text-muted'>{categoryName}</h4>
                             <p className='text-muted fs-5'><strong className='text-black'>Description:</strong> {item.description}</p>
-                            <p className='text-muted fs-5'><strong className='text-black'>Quantity:</strong> {item.quantity}</p>
+                            <p className='text-muted fs-5'><strong className='text-black'>Quantity:</strong> {item.quantity>0? item.quantity:"Out of stock"}</p>
                             {item.offer ? (
                                 <>
                                 <Card.Text>
@@ -155,24 +167,35 @@ export default function Product({ categoryProducts =[], categoryName = '', loadi
                                                 <span className={Styles.percent}>20%</span>
                                   </div>
                                 </>
-                              ): <p className='text-muted fs-5'><strong className='text-black'>Price:</strong> {item.price}</p>}
+                              ): <p className='text-muted fs-5'><strong className='text-black'>Price:</strong> {item.price} EG</p>}
                             <div className={[Styles.contain]}>
                            
+                        { item.quantity>0?
                         <Button 
-                          variant={isCarted ? 'danger' : 'success'}
-                          onClick={() => handleAddToCart(item.productId, isCarted ? 'delete' : 'post')}
-                          className={`${Styles.button} w-75 ${isCarted ? 'bg-danger' : ''}`}
-                          disabled={loading2[item.productId]}
-                        >
-                          {loading2[item.productId] ? (
-                            <i className="fa-solid fa-cart-shopping fa-spin"></i>
-                          ) : (
-                            <>
-                              {isCarted ? "Remove" : "Order"}
-                              <FontAwesomeIcon icon={faCartShopping} className={Styles.icon} />
-                            </>
-                          )}    
-                        </Button>
+                        variant={isCarted ? 'danger' : 'success'}
+                        onClick={() => handleAddToCart(item.productId, isCarted ? 'delete' : 'post')}
+                        className={`${Styles.button} w-75 ${isCarted ? 'bg-danger' : ''}`}
+                        disabled={loading2[item.productId]}
+                      >
+                        {loading2[item.productId] ? (
+                          <i className="fa-solid fa-cart-shopping fa-spin"></i>
+                        ) : (
+                          <>
+                            {isCarted ? "Remove" : "Order"}
+                            <FontAwesomeIcon icon={faCartShopping} className={Styles.icon} />
+                          </>
+                        )}    
+                      </Button>:
+                        <Button 
+                        variant={'danger'}
+                        className={`${Styles.button} w-75 bg-danger}`}
+                        disabled
+                      >
+                        Sold out <i class="fas fa-frown"></i> 
+                            
+                      </Button>
+
+                        }
                         <div onClick={() => handlWishlist(item.productId, iswishList ? 'delete' : 'post')}
                          className={`${[Styles.heart]} `}>
                           <i className={`${Styles.ii} ${iswishList? 'fa-solid':'fa-regular'}  fa-heart`}></i> 

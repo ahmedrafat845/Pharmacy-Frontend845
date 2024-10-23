@@ -1,1 +1,1 @@
-export const BaseUrl="https://pharmacy-backend845-ezf4.vercel.app"
+export const BaseUrl="https://rosheta.vercel.app"

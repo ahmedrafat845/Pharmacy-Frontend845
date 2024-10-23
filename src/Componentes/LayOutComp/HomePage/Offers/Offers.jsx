@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FetchCartContext } from './../../../../Context/Cart';
 import { FetchWishlistContext } from '../../../../Context/WishList';
+import { BaseUrl } from '../../../BaseUrl/base'
+
 function Offers() {
     const {addProductToWishlist,wishlist,getProductWishlist,
         deleteProductFromWishlist}=useContext(FetchWishlistContext);
@@ -64,7 +66,7 @@ function Offers() {
 
     const fetchOfferCounts = async () => {
         try {
-            const response = await axios.get('https://pharmacy-backend845.vercel.app/products/getAllProducts');
+            const response = await axios.get(`${BaseUrl}/products/getAllProducts`);
             const allProducts = response.data.allProducts || [];
             const offerItems = allProducts.filter(item => item.offer === true);
             setOfferCounts(offerItems);
@@ -118,7 +120,9 @@ function Offers() {
                                     </div>
                                     <div className={Styles.contain}>
                                       
-                                        <Button
+                                        
+                                        { item.quantity>0?
+                                            <Button
                                             variant={isCarted ? 'danger' : 'success'}
                                             onClick={() => handleAddToCart(item._id, isCarted ? 'delete' : 'post')} 
                                             className={`${Styles.button} ${isCarted ? 'bg-danger' : ''}`}
@@ -132,7 +136,16 @@ function Offers() {
                                                     <FontAwesomeIcon icon={faCartShopping} className={Styles.icon} />
                                                 </>
                                             )}
-                                        </Button>
+                                        </Button>:
+                                                <Button 
+                                                variant={'danger'}
+                                                className={`${Styles.button} bg-danger}`}
+                                                disabled
+                                            >
+                                                Sold out <i class="fas fa-frown"></i>
+                                            </Button>
+
+                                                }
                                         <div  onClick={() => handlWishlist(item._id, iswishList ? 'delete' : 'post')}
                                                 className={`${[Styles.heart]} `}>
                                                 <i className={`${Styles.ii} ${iswishList? 'fa-solid':'fa-regular'}  fa-heart`}></i> 

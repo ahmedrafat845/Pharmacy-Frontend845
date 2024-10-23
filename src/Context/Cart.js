@@ -25,6 +25,7 @@ export default function FetchCartProvider(props) {
             await axios.post(`${BaseUrl}/carts/addProductToCart`, { productId }, {
                 headers: { 'token': token }
             });
+            console.log(productId)
             notify('Product Added To Cart', 'success');
             getProductCart(); 
         } catch (error) {

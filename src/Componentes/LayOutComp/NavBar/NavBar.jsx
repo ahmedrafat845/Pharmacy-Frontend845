@@ -15,7 +15,7 @@ import { mediaContext } from '../../../Context/MediaStore';
 import { FetchWishlistContext } from '../../../Context/WishList';
 import styles from './NavBar.module.scss'; 
 import logos from '../../../images/logoO.png';
-
+import HistoryIcon from '@mui/icons-material/History'; 
 export default function NavBar() {
   const navigate = useNavigate();
   const { numOfCart } = useContext(FetchCartContext);
@@ -34,7 +34,7 @@ export default function NavBar() {
   return (
     <Navbar expand="lg" style={{ backgroundColor: '#d3d3d3' }} className={styles.navbar}>
       <Container fluid>
-        <Navbar.Brand href="/" className={styles.brand}>
+        <Navbar.Brand as={Link} to="/" className={styles.brand}>
           <img src={logos} alt='logo' className={styles.logo}/>
           Rosheta
         </Navbar.Brand>
@@ -108,6 +108,23 @@ export default function NavBar() {
                   </IconButton>
                 </Link>
                     </>)}
+                    <Link to="/Orders" style={{ margin: '0 5px', textDecoration: 'none' }}>
+                  <IconButton
+                    className={`btn btn-light border rounded-3`}
+                    aria-label="profile"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      borderColor: 'rgba(0, 0, 0, 0.1)',
+                      fontSize: '1.2rem', 
+                      padding: '5px 10px', 
+                      fontWeight: '200', 
+                    }}
+                  >
+                    <HistoryIcon style={{ marginRight: '5px', width: '20px', height: '20px' }} />
+                    Orders
+                  </IconButton>
+                </Link>
                 <Link to="/profile" style={{ margin: '0 5px', textDecoration: 'none' }}>
                   <IconButton
                     className={`btn btn-light border rounded-3`}
@@ -125,6 +142,7 @@ export default function NavBar() {
                     Profile
                   </IconButton>
                 </Link>
+
 
                 <Link style={{ textDecoration: 'none' }}>
                   <IconButton
