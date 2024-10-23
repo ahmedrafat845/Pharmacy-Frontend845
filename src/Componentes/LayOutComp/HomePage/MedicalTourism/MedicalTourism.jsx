@@ -3,7 +3,7 @@ import styles from './MedicalTourism.module.scss';
 import Carousel from 'react-bootstrap/Carousel';
 import { Container } from 'react-bootstrap/esm';
 import lake from '../../../../images/lake.jpeg';
-import sand from '../../../../images/sand.jpg';
+import sand from '../../../../images/desert.webp';
 import siwa from '../../../../images/siwa.webp';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
