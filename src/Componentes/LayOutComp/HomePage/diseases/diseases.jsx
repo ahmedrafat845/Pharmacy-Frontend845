@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ears from '../../../../images/ears.jpg';
 import eyes from '../../../../images/eyes.jpg';
 import internalDiseases from '../../../../images/belly.jpg';
-import painkillers from '../../../../images/painkillers.jpg';
+import painkillers from '../../../../images/pain.jpg';
 import mentalhealth from '../../../../images/mentalHealth.jpeg';
 import bones from '../../../../images/bone.jpg';
 import Styles from './diseases.module.scss';
