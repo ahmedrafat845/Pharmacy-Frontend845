@@ -57,20 +57,15 @@ const CartPage = () => {
                     quantity: item.quantity,
                 })),
             });
-    
             if (!response.data.success) {
                 throw new Error('Cash payment failed.');
             }
-    
-            // Notify the user of success
             toast.success('Cash payment successful. ' , {
                 autoClose: 2000,
                 theme: 'dark',
                 position: 'top-center',
             });
-    
-            clearCart(); // Clear the cart after successful payment
-    
+            clearCart();
         } catch (error) {
             console.error('Cash Payment Error:', error);
             toast.error('Cash payment failed. Please try again.', {
