@@ -1,28 +1,31 @@
 import React, { useContext } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import FetchCartProvider from '../../Context/Cart';
 import { mediaContext } from '../../Context/MediaStore';
-import ProductManager from '../LayOutComp/AdminPage/Admin';
+import AddProduct from '../LayOutComp/AdminPage/addProduct/Addproduct';
+import ProductManager from '../LayOutComp/AdminPage/productManager/ProductManager';
+import Alternative from '../LayOutComp/Alternative/AlternativesPage';
 import MedicalTests from '../LayOutComp/MedicalTests/MedicalTests';
 import MedicalTourism from '../LayOutComp/medicaltourism/medicaltourism';
+import Orders from '../LayOutComp/Orders/Order';
 import Products from '../LayOutComp/Products/Products';
+import Profile from '../LayOutComp/profile/profile';
 import WishList from '../LayOutComp/WishList/WishList';
 import ForgetPassword from '../RegisterationComp/ForgetPassword/ForgetPassword';
 import ProtectRouter from '../RegisterationComp/ProtectRouter/ProtectRouter';
 import ResetPassword from '../RegisterationComp/ResetPassword/ResetPassword';
+import ReverseProtectRouter from '../RegisterationComp/ReverseProtectRouter/ReverseProtect';
 import SignUp from '../RegisterationComp/SignUp/SignUp';
 import CartPage from './../LayOutComp/CartPage/CartPage';
 import Home from './../LayOutComp/HomePage/Home';
 import MasterLayOut from './../LayOutComp/MaterLayOut/MasterLayOut';
-import Login from './../RegisterationComp/Login/Login';
-import Alternative from '../LayOutComp/Alternative/AlternativesPage';
-import Profile from '../LayOutComp/profile/profile'
 import NotFound from './../LayOutComp/NotFound/NotFound';
-import { ToastContainer } from 'react-toastify';
-import ReverseProtectRouter from '../RegisterationComp/ReverseProtectRouter/ReverseProtect';
-import Orders from '../LayOutComp/Orders/Order';
+import Login from './../RegisterationComp/Login/Login';
+
 export default function App() {
   const { Role } = useContext(mediaContext);
+
   let routesConfig = [
     {
       path: '/',
@@ -37,8 +40,7 @@ export default function App() {
         { path: 'Alternative', element: <ProtectRouter><Alternative /></ProtectRouter> },
         { path: 'Profile', element: <ProtectRouter><Profile /></ProtectRouter> },
         { path: 'Orders', element: <ProtectRouter><Orders /></ProtectRouter> },
-
-        { path:"Login" ,element:<ReverseProtectRouter><Login /></ReverseProtectRouter>} ,
+        { path: "Login", element: <ReverseProtectRouter><Login /></ReverseProtectRouter> },
         { path: 'SignUp', element: <SignUp /> },
         { path: 'ForgetPassword', element: <ForgetPassword /> },
         { path: 'ResetPassword', element: <ResetPassword /> },
@@ -46,21 +48,36 @@ export default function App() {
     }
   ];
 
-
   if (Role === 'admin') {
+    routesConfig[0].children.push(
+      {
+        path: '',
+        element: (
+          <ProtectRouter>
+            <AddProduct />
+          </ProtectRouter>
+        ),
+      },
+      {
+        path: 'ProductManager',
+        element: (
+          <ProtectRouter>
+            <ProductManager />
+          </ProtectRouter>
+        ),
+      }
+    );
+  } else {
     routesConfig[0].children.push({
-      index:true,
-      element: <ProtectRouter><ProductManager /></ProtectRouter>
+      index: true,
+      element: <ProtectRouter><Home /></ProtectRouter>
     });
-  }else{
-    routesConfig[0].children.push( { index: true, element: <ProtectRouter><Home /></ProtectRouter> });
   }
 
   const routes = createBrowserRouter(routesConfig);
 
   return (
     <>
-    
       <FetchCartProvider>
         <ToastContainer theme='colored' />
         <RouterProvider router={routes} />
