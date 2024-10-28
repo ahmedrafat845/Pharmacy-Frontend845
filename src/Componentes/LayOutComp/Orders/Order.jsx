@@ -72,7 +72,7 @@ const Orders = () => {
         if (!['pending', 'canceled','completed'].includes(statusToUpdate)) return;
 
         try {
-            const response = await axios.put(`http://localhost:3000/orders/${selectedOrder._id}/updateStatus`, {
+            const response = await axios.put(`https://pharmacy-backend845-ezf4.vercel.app/orders/${selectedOrder._id}/updateStatus`, {
                 status: statusToUpdate,
             });
 
