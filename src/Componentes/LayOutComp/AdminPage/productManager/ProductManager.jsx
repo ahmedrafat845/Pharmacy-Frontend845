@@ -109,7 +109,7 @@ const ProductManager = () => {
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Subtitle className="mb-2 text-muted">Category: {product.category}</Card.Subtitle>
                                     <Card.Text>
-                                        <strong>Price:</strong> EGP {product.price.toFixed(2)}<br />
+                                        <strong>Price:</strong> $ {product.price.toFixed(2)}<br />
                                         <strong>Quantity:</strong> {product.quantity}<br />
                                         <strong>Best Seller:</strong> {product.bestSeller ? "Yes" : "No"}<br />
                                         <strong>Offer:</strong> {product.offer ? "Yes" : "No"}<br />

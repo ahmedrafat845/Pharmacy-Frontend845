@@ -8,6 +8,8 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Container } from 'react-bootstrap';
 import Slider from './Slide/Slide';
 
+
+
 export default function Products() {
   const { hash } = useLocation();
   const { ear, eyes, painkiller, skinCare, haircare, head, depression, internalDiseases, bones, loading } = useContext(FetchProduct);
